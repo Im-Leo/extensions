@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* Copyright © 2026 Im-Leo */
+
 import {
   implementsChapterProviding,
   implementsSearchResultsProviding,
@@ -17,7 +19,13 @@ import {
 } from "@paperback/types";
 import { expect } from "chai";
 
-// Types for test cases and results
+import {
+  assertChapter,
+  assertChapterDetails,
+  assertSearchResultItem,
+  assertSourceManga,
+} from "./contracts.js";
+
 export type TestCase = {
   name: string;
   fn: (testLogger: TestLogger) => Promise<unknown>;
@@ -31,10 +39,10 @@ export type TestResult = {
   returnValue?: unknown;
 };
 
-// Test Suite class
 export class TestSuite {
   readonly state: Record<string, unknown> = {};
   private testCases: TestCase[] = [];
+  private skippedCases: { name: string; reason: string }[] = [];
   private logger: TestLogger;
 
   constructor(name: string, logger: TestLogger) {
@@ -42,12 +50,15 @@ export class TestSuite {
     this.logger.log("name", name);
   }
 
-  // Register a test case
   test(name: string, fn: () => Promise<void>): void {
     this.testCases.push({ name, fn });
   }
 
-  // Run all test cases sequentially
+  /** Recorded distinctly from a pass, so a disabled test cannot read as green. */
+  skip(name: string, reason: string): void {
+    this.skippedCases.push({ name, reason });
+  }
+
   async run() {
     const startTime = Date.now();
     let passed = 0;
@@ -74,11 +85,19 @@ export class TestSuite {
       }
     }
 
+    for (const skipped of this.skippedCases) {
+      const skippedLogger = tests.scope(skipped.name);
+      skippedLogger.log("status", "skip");
+      skippedLogger.log("reason", skipped.reason);
+    }
+
     const totalDuration = Date.now() - startTime;
+
     const suiteResult = {
       passed,
       failed,
-      total: this.testCases.length,
+      skipped: this.skippedCases.length,
+      total: this.testCases.length + this.skippedCases.length,
       duration: totalDuration,
     };
 
@@ -108,6 +127,11 @@ type ExtensionTestData = {
     | false;
 };
 
+/**
+ * The end-to-end pass every source shares: discover, search, details, chapters,
+ * pages. Each step feeds the next, so a failure early on cascades by design —
+ * there is nothing to assert about a chapter that was never found.
+ */
 export const registerDefaultTests = function (
   suite: TestSuite,
   extension: Extension,
@@ -191,7 +215,7 @@ export const registerDefaultSearchResultsProvidingSourceTests = function (
       }
 
       const sortingOptions = await extension.getSortingOptions!(...params);
-      expect(sortingOptions).not.empty;
+      expect(sortingOptions.length, "sorting options must not be empty").to.be.greaterThan(0);
 
       suite.state[STATE_KEY.SearchResultsProviding.getSortingOptions] = sortingOptions;
     });
@@ -210,8 +234,11 @@ export const registerDefaultSearchResultsProvidingSourceTests = function (
       }
 
       const searchResults = await extension.getSearchResults(...params);
-      expect(searchResults).not.empty;
-      expect(searchResults.items).not.be.empty;
+      expect(searchResults, "search results missing").to.not.equal(undefined);
+      expect(searchResults.items.length, "no search results").to.be.greaterThan(0);
+      searchResults.items
+        .slice(0, 3)
+        .forEach((item, i) => assertSearchResultItem(item, `item ${i}`));
 
       suite.state[STATE_KEY.SearchResultsProviding.getSearchResults] = searchResults;
     });
@@ -242,8 +269,8 @@ export const registerDefaultMangaProvidingSourceTests = function (
       }
 
       const mangaDetails = await extension.getMangaDetails(...params);
-      expect(mangaDetails).to.not.be.undefined;
-      expect(mangaDetails.mangaInfo).to.not.be.undefined;
+      expect(mangaDetails, "manga details missing").to.not.equal(undefined);
+      assertSourceManga(mangaDetails, "manga details");
 
       suite.state[STATE_KEY.MangaProviding.getMangaDetails] = mangaDetails;
     });
@@ -275,7 +302,8 @@ export const registerDefaultChapterProvidingSourceTests = function (
       }
 
       const chapters = await extension.getChapters(...params);
-      expect(chapters).to.not.be.empty;
+      expect(chapters.length, "no chapters").to.be.greaterThan(0);
+      chapters.slice(0, 3).forEach((chapter, i) => assertChapter(chapter, `chapter ${i}`));
 
       suite.state[STATE_KEY.ChapterProviding.getChapters] = chapters;
     });
@@ -301,7 +329,7 @@ export const registerDefaultChapterProvidingSourceTests = function (
       }
 
       const chapterDetails = await extension.getChapterDetails(...params);
-      expect(chapterDetails).to.not.be.undefined;
+      assertChapterDetails(chapterDetails, "chapter details");
 
       suite.state[STATE_KEY.ChapterProviding.getChapterDetails] = chapterDetails;
     });

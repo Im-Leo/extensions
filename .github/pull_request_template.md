@@ -6,8 +6,6 @@
 
 ### Making changes
 
-- [ ] Follows Inkdex's [Contributing Guidelines](https://github.com/inkdex/extensions/blob/master/.github/CONTRIBUTING.md).
-
 #### For updates to existing extensions
 
 - [ ] Bumped the `version` value in `pbconfig.ts` for each modified extension.
