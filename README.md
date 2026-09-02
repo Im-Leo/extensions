@@ -72,11 +72,11 @@ src/<Name>/*.ts  --tsc (type-check only, noEmit)-->  no output
 ```
 
 A directory under `src/` is an extension if and only if it contains `pbconfig.ts`, which declares
-its name, version, icon and capabilities. The bundler inlines each extension's entire import graph
+its name, version, icon, and capabilities. The bundler inlines each extension's entire import graph
 into one self-contained file, so extensions share no runtime and cannot affect one another. Shared
 source is therefore copied into every bundle that imports it.
 
-`tsc` is a correctness gate rather than a build step, `tsconfig.json` sets `noEmit`.
+`tsc` is a correctness gate rather than a build step; `tsconfig.json` sets `noEmit`.
 
 The publishing branch must match `[0-9]+.[0-9]+/*` or `bundle-deploy.yaml` never fires.
 
@@ -155,7 +155,7 @@ source starts failing closed on device, this limit is the first thing to walk ba
 
 **MangaFox's limit is what governs how fast a chapter opens.** Paginated chapters need one
 `chapterfun.ashx` request per page, and a long chapter is ~46 pages, so the budget is multiplied by
-the page count. At the inherited 4/sec a chapter took ~11 s, of which the limiter accounted for
+the page count. At the inherited 4/sec, a chapter took ~11 s, of which the limiter accounted for
 essentially all: each request costs ~215 ms, but 4/sec spaces them 250 ms apart.
 
 The current limit is 12/sec (the site returned all 45 page requests issued at once in ~520 ms),
@@ -169,14 +169,14 @@ budget cannot either.
 Paperback blurs artwork by rating, so a wrong rating is a privacy problem rather than a cosmetic
 one. Two rules follow, and `src/utils/content-rating.ts` exists to enforce them in one place:
 
-**A rating is derived from the title in hand. never asserted for a whole source.** Both failure
+**A rating is derived from the title in hand. Never asserted for a whole source.** Both failure
 modes have shipped here. A blanket `ContentRating.EVERYONE` tells the app adult artwork is safe, and
 because it is an assertion rather than an absence, no user setting can override it. The mirror image
-is rating from a site's static genre catalogue, which always contains "Adult" and so rated every
+is rating from a site's static genre catalog, which always contains "Adult" and so rated every
 title ADULT.
 
 **Unknown must never read as safe.** MangaFox and MangaKakalot serve listing grids carrying only
-title, cover and latest chapter (no genres) and classifying a tile costs one detail request each:
+title, cover, and latest chapter (no genres), and classifying a tile costs one detail request each:
 70 on a MangaFox listing page, and Cloudflare-challenged on MangaKakalot. Those tiles therefore
 report `UNRATED_LISTING_DEFAULT` (MATURE), so the cost of not knowing is a blurred safe cover rather
 than exposed adult artwork.
@@ -189,14 +189,14 @@ Three mechanisms narrow that gap without extra requests:
 | AsuraScans, FlameComics | `genres[]` / `categories`+`tags`, present on listings and details |
 | MangaFox, MangaKakalot  | detail genres; genre-browse pages; otherwise the default          |
 
-Genres reach the classifier under two names — a detail page gives the display
-name ("Sexual Violence"), browsing gives the URL slug ("sexual-violence") — so
+Genres reach the classifier under two names; a detail page gives the display
+name ("Sexual Violence"), browsing gives the URL slug ("sexual-violence"), so
 separators are folded to spaces before matching. The vocabulary is drawn from
 what these sites actually tag with, which on MangaKakalot alone runs to 277
 genres.
 
 Browsing `/genre/adult` is itself evidence about every tile on the page, so those rate accurately.
-Only a genre that _raises_ the rating counts — a safe genre says nothing about a title's other
+Only a genre that _raises_ the rating counts; a safe genre says nothing about a title's other
 genres and must not assert safety. And `ContentRatingCache` remembers what detail pages teach, so a
 title reverts from the default to its real rating once opened.
 
@@ -206,7 +206,7 @@ so MangaKakalot declares no `featured` section; "New Titles" is a
 easy thing to change back.
 
 Because that costs a request per tile, MangaKakalot's cache is persisted under
-the source's own state and reloaded on launch, otherwise every restart repays
+the source's own state and reloaded on launch; otherwise every restart repays
 the whole listing. It is bounded, and written once per batch rather than per
 title.
 
@@ -217,7 +217,7 @@ source whose front page actually carries explicit covers. Those requests go thro
 outstanding: issuing a whole page at once returned Cloudflare 520/522 errors from the origin, while
 the same requests pooled complete cleanly.
 
-The same treatment was measured on MangaFox and **deliberately dropped in favour of performance**.
+The same treatment was measured on MangaFox and **deliberately dropped in favor of performance**.
 Its listing pages carry 70 tiles against MangaKakalot's 24, and its detail pages are ~366 KB each.
 Roughly 24 MB per carousel, across three listing sections plus search, on top of 86 s unpooled or a
 few seconds pooled. That is not a reasonable cost on a phone, so MangaFox keeps the cheap path: the
@@ -234,9 +234,9 @@ network, it also covers MangaKakalot, which live tests can never reach because C
 
 **`npm run test:live` hits the real sites.** Slower and dependent on someone else's data.
 MangaDex's live tests pin a specific manga. The suite otherwise takes the first
-search result, and many of MangaDex's most popular titles are licensed — every
+search result, and many of MangaDex's most popular titles are licensed; every
 chapter carries `externalUrl` with `pages: 0`, so `getChapters` correctly returns
-none and the assertion fails on right behaviour.
+none and the assertion fails on the right behavior.
 
 MangaKakalot's four failures are expected rather than a regression: Cloudflare challenges it from
 Node, and every later step depends on the search that fails first. Its listing-tile rating
@@ -250,7 +250,7 @@ probe disables live tests rather than quietly skipping offline ones.
 CI mirrors the split: push and pull requests run the offline gate; a daily schedule runs the live
 suite as `continue-on-error`, where a failure means a site changed rather than the branch breaking.
 
-`tsconfig.json` runs every strict flag TypeScript offers except one. `exactOptionalPropertyTypes`
+`tsconfig.json` runs every strict flag TypeScript offers except one: `exactOptionalPropertyTypes`
 is deliberately off: it reports 54 errors, and 19 are the same shape `{ metadata: undefined }`
 assigned where the type says `metadata?:`. Paperback treats an absent cursor and an undefined one
 identically, so satisfying it would mean a conditional spread at every paged return, which is noise
@@ -258,26 +258,26 @@ in exchange for a distinction nothing acts on.
 
 The suite is type-checked along with the sources; `tsconfig.json` excludes nothing. This matters
 more than it sounds: JavaScript ignores extra arguments, so a test calling a since-changed helper
-keeps passing while asserting nothing. Four sources once had their content-rating behaviour rewritten
+keeps passing while asserting nothing. Four sources once had their content-rating behavior rewritten
 with every test still green, because the stale calls were invisible to both the runner and `tsc`.
 
 ### Writing tests
 
 Fixtures are hand-written and contain only the elements a parser queries, so a failure points at one
 selector rather than a whole page. Prefer method-form assertions (`expect(x.length).to.equal(0)`)
-over chai's property form (`.to.be.empty`), the latter is a bare property access, so a typo passes
+over chai's property form (`.to.be.empty`); the latter is a bare property access, so a typo passes
 silently.
 
 Tests aim at the failure modes these sources actually exhibit: content ratings derived from a
-title's own tags rather than a static catalogue, search metadata using the current key, chapter ids
+title's own tags rather than a static catalog, search metadata using the current key, chapter ids
 containing dots, numeric page ordering, and interceptor ids being unique within an extension.
 
-MangaDex's helpers also carry characterization tests, which pin current behaviour so a refactor can
+MangaDex's helpers also carry characterization tests, which pin current behavior so a refactor can
 be proven not to change it. If one fails after a refactor, the refactor is wrong.
 
 ## Known gaps
 
-Capabilities these sources do not have, rather than faults.
+Capabilities these sources lack, rather than faults.
 
 **FlameComics**: no novel support (novels are filtered out, since a manga reader cannot render
 them), no settings form, and no deep search across alternative titles.
@@ -287,7 +287,7 @@ at whatever resolution was uploaded, measured between 160×213 and 480×623. A s
 to fill the detail hero is unavoidably blurry, and no larger variant is served.
 
 **MangaFox**: listing tiles are rated conservatively rather than exactly. Resolving them properly
-costs a detail page each, and at 70 tiles of ~366 KB per listing that is roughly 24 MB per carousel,
+costs a detail page each, and at 70 tiles of ~366 KB per listing, that is roughly 24 MB per carousel,
 so a tile can read `MATURE` until its title has been opened once. See
 [Content ratings](#content-ratings).
 
@@ -297,5 +297,5 @@ GPL-3.0-or-later. The full text is in [`LICENSE`](LICENSE), the licence is decla
 `package.json`, and all 95 source files carry `SPDX-License-Identifier: GPL-3.0-or-later` with
 `Copyright © 2026 Im-Leo`.
 
-The repository layout, toolchain configuration and CI workflows derive from
+The repository layout, toolchain configuration, and CI workflows derive from
 [Inkdex's extension template](https://github.com/inkdex/template-extensions).
