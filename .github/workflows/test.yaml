@@ -6,8 +6,12 @@ on:
       - Bundle and Deploy
     types:
       - completed
+  # Live sources drift without any commit here, so they are polled on a
+  # schedule. Daily rather than hourly: five scraped sites x 24 runs is enough
+  # traffic from one IP to look like abuse, and site markup does not change that
+  # fast.
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 6 * * *"
   pull_request:
   workflow_dispatch:
 
@@ -19,8 +23,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Run Tests
+  offline:
+    name: Offline Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Branch
@@ -32,7 +36,8 @@ jobs:
           cache: npm
       - name: Install Dependencies
         run: npm ci
-      - name: Run Tests
+      # Deterministic and network-free: this one gates the branch.
+      - name: Run Offline Tests
         run: npm test
       - name: Upload Test Results
         if: ${{ github.event_name != 'pull_request' }}
@@ -40,3 +45,31 @@ jobs:
         with:
           name: tests.json
           path: bundles/tests.json
+
+  live:
+    name: Live Tests
+    # Only worth running when the sites themselves might have changed.
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    # Informational. A failure here means a site changed or blocked us, not that
+    # the branch is broken — MangaKakalot's Cloudflare challenge fails from CI by
+    # design. Read the artifact rather than the job status.
+    continue-on-error: true
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v6
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Live Tests
+        run: npm run test:live
+      - name: Upload Live Test Results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: tests-live.json
+          path: bundles/tests-live.json
