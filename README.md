@@ -19,9 +19,9 @@ own.
 Each of the five here is written from scratch rather than forked, using
 [Inkdex's extension template](https://github.com/inkdex/template-extensions) as a base.
 
-Every source follows the same layering, parsers are pure functions with offline fixtures,
-and behaviour that can only be observed by making a request is pulled out until it can
-be asserted without one, so when a site changes, a test says which selectormoved instead
+Every source follows the same layering; parsers are pure functions with offline fixtures,
+and behavior that can only be observed by making a request is pulled out until it can
+be asserted without one, so when a site changes, a test says which selector moved instead
 of the app quietly rendering an empty shelf.
 
 ## Installing
