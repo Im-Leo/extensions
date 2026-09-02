@@ -1,0 +1,1 @@
+{"name":"MangaDex","description":"Extension that pulls content from mangadex.org.","version":"1.1.0","icon":"icon.png","language":"multi","contentRating":"SAFE","capabilities":[1,4,8,64,32],"badges":[],"developers":[{"name":"Im-Leo","github":"https://github.com/Im-Leo"}],"id":"MangaDex"}

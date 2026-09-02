@@ -1,0 +1,125 @@
+{
+  "buildTime": "2026-09-02T20:29:56.323Z",
+  "builtWith": {
+    "toolchain": "1.0.0-alpha.92",
+    "types": "1.0.0-alpha.92"
+  },
+  "repository": {
+    "name": "Coffee's Extensions (0.9)",
+    "description": "Paperback v0.9 extensions: AsuraScans, FlameComics, MangaDex, MangaFox, MangaKakalot. Maintained by discord @coffee.lover"
+  },
+  "sources": [
+    {
+      "name": "Asura Scans",
+      "description": "Extension that pulls content from asurascans.com.",
+      "version": "1.1.0",
+      "icon": "icon.png",
+      "language": "en",
+      "contentRating": "SAFE",
+      "capabilities": [
+        1,
+        4,
+        32,
+        64,
+        2
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "Im-Leo",
+          "github": "https://github.com/Im-Leo"
+        }
+      ],
+      "id": "AsuraScans"
+    },
+    {
+      "name": "FlameComics",
+      "description": "Extension that pulls content from FlameComics.xyz.",
+      "version": "1.1.0",
+      "icon": "icon.png",
+      "language": "en",
+      "contentRating": "SAFE",
+      "capabilities": [
+        1,
+        16,
+        4,
+        64
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "Im-Leo",
+          "github": "https://github.com/Im-Leo"
+        }
+      ],
+      "id": "FlameComics"
+    },
+    {
+      "name": "MangaDex",
+      "description": "Extension that pulls content from mangadex.org.",
+      "version": "1.1.0",
+      "icon": "icon.png",
+      "language": "multi",
+      "contentRating": "SAFE",
+      "capabilities": [
+        1,
+        4,
+        8,
+        64,
+        32
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "Im-Leo",
+          "github": "https://github.com/Im-Leo"
+        }
+      ],
+      "id": "MangaDex"
+    },
+    {
+      "name": "MangaFox",
+      "description": "Extension that pulls content from fanfox.net.",
+      "version": "1.1.0",
+      "icon": "icon.png",
+      "language": "en",
+      "contentRating": "MATURE",
+      "capabilities": [
+        1,
+        16,
+        4,
+        64
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "Im-Leo",
+          "github": "https://github.com/Im-Leo"
+        }
+      ],
+      "id": "MangaFox"
+    },
+    {
+      "name": "MangaKakalot",
+      "description": "Extension that pulls content from mangakakalot.gg.",
+      "version": "1.1.0",
+      "icon": "icon.png",
+      "language": "en",
+      "contentRating": "SAFE",
+      "capabilities": [
+        1,
+        4,
+        64,
+        16
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "Im-Leo",
+          "github": "https://github.com/Im-Leo"
+        }
+      ],
+      "id": "MangaKakalot"
+    }
+  ]
+}
