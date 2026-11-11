@@ -35,7 +35,7 @@ import {
   type AsuraChapterResponse,
   type AsuraCreatorRequest,
   type AsuraGenre,
-  type AsuraManga,
+  type AsuraSeriesResponse,
   type AsuraMetadata,
   type AsuraSearchResult,
   type PageData,
@@ -48,6 +48,7 @@ import {
   parseMangaDetails,
   toCreatorTags,
   toSearchResultItem,
+  unwrapSeries,
 } from "./parsers";
 import type AsuraConfig from "./pbconfig";
 import { descramblePage } from "./reader";
@@ -222,9 +223,9 @@ export class AsuraScansExtension implements ExtensionImpl<typeof AsuraConfig> {
   }
 
   async getMangaDetails(mangaId: string): Promise<SourceManga> {
-    const { series } = await this.requestJSON<{ series: AsuraManga }>(seriesUrl(mangaId));
+    const body = await this.requestJSON<AsuraSeriesResponse>(seriesUrl(mangaId));
 
-    return parseMangaDetails(series);
+    return parseMangaDetails(unwrapSeries(body));
   }
 
   async getChapters(sourceManga: SourceManga): Promise<Chapter[]> {

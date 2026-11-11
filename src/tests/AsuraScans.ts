@@ -11,6 +11,7 @@ import {
   parseChapters,
   parseMangaDetails,
   toSearchResultItem,
+  unwrapSeries,
 } from "../AsuraScans/parsers.js";
 import sourceInfo from "../AsuraScans/pbconfig.js";
 import {
@@ -72,6 +73,20 @@ function registerOfflineTests(suite: TestSuite): void {
 
     const fallback = toSearchResultItem(makeManga({ cover_url: undefined }));
     expect(fallback.imageUrl).to.equal("https://cdn.asurascans.com/covers/fallback.webp");
+  });
+
+  suite.test("unwrapSeries: reads the bare envelope", async () => {
+    const manga = makeManga();
+    expect(unwrapSeries({ series: manga })).to.equal(manga);
+  });
+
+  suite.test("unwrapSeries: reads the data-wrapped envelope", async () => {
+    const manga = makeManga();
+    expect(unwrapSeries({ data: { series: manga } })).to.equal(manga);
+  });
+
+  suite.test("unwrapSeries: rejects a payload without a series", async () => {
+    expect(() => unwrapSeries({} as never)).to.throw("Unexpected series payload");
   });
 
   suite.test("parseMangaDetails: maps the payload", async () => {

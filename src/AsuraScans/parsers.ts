@@ -4,7 +4,12 @@
 import type { Chapter, SearchResultItem, SourceManga, Tag } from "@paperback/types";
 
 import { rateContent } from "../utils/content-rating";
-import { AS_DOMAIN, type AsuraChapterResponse, type AsuraManga } from "./models";
+import {
+  AS_DOMAIN,
+  type AsuraChapterResponse,
+  type AsuraManga,
+  type AsuraSeriesResponse,
+} from "./models";
 
 /** A future unlock date means the chapter is paywalled; absent or past means free. */
 function isEarlyAccess(until: string | null | undefined): boolean {
@@ -32,6 +37,16 @@ export function toSearchResultItem(manga: AsuraManga): SearchResultItem {
     subtitle: latestChapterSubtitle(manga),
     contentRating: rateContent(genreNames(manga)),
   };
+}
+
+/**
+ * A cache hit answers `{ series }` and a miss answers `{ data: { series } }`, so
+ * any title alternates between the two as its cache entry expires.
+ */
+export function unwrapSeries(body: AsuraSeriesResponse): AsuraManga {
+  const series = "series" in body ? body.series : body.data?.series;
+  if (!series) throw new Error("Unexpected series payload");
+  return series;
 }
 
 export function parseMangaDetails(manga: AsuraManga): SourceManga {

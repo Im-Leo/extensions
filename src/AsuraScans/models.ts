@@ -47,6 +47,9 @@ export interface PageData {
   tile_rows: number;
 }
 
+/** The API serves either shape for the same series, depending on its cache state. */
+export type AsuraSeriesResponse = { series: AsuraManga } | { data: { series: AsuraManga } };
+
 export interface AsuraSearchResult {
   data: AsuraManga[];
   meta: AsuraMetadata;
