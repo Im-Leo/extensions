@@ -12,12 +12,12 @@ export const COMPACT_LISTING_HTML = `
   <div class="manga-list-1"><ul class="manga-list-1-list">
     <li>
       <a href="/manga/first_title/" title="First Title"></a>
-      <img class="manga-list-1-cover" src="https://fmcdn.mfcdn.net/store/manga/1/cover.jpg?token=a">
+      <img class="manga-list-1-cover" src="http://fmcdn.mfcdn.net/store/manga/1/cover.jpg?token=a">
       <p class="manga-list-1-item-subtitle">Ch.120</p>
     </li>
     <li>
       <a href="/manga/second_title/" title="Second Title"></a>
-      <img class="manga-list-1-cover" src="https://fmcdn.mfcdn.net/store/manga/2/cover.jpg?token=b">
+      <img class="manga-list-1-cover" src="//fmcdn.mfcdn.net/store/manga/2/cover.jpg?token=b">
       <p class="manga-list-1-item-subtitle">Ch.7</p>
     </li>
   </ul></div>
@@ -60,7 +60,7 @@ export const PAGER_ABSENT_HTML = `<html><body><div class="pager-list-left"></div
 export const DETAIL_SAFE_HTML = `
 <html><body>
   <div class="detail-info-cover">
-    <img class="detail-info-cover-img" src="https://fmcdn.mfcdn.net/store/manga/9/cover.jpg?token=z">
+    <img class="detail-info-cover-img" src="http://fmcdn.mfcdn.net/store/manga/9/cover.jpg?token=z">
   </div>
   <div class="detail-info">
     <span class="detail-info-right-title-font">Safe Title</span>

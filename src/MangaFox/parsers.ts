@@ -69,7 +69,7 @@ export function parseListing(
     const link = $(layout.link, element).first();
     const mangaId = sanitizeId(link.attr("href")?.split("/manga/")[1] ?? "");
     const title = link.attr("title")?.trim() ?? "";
-    const imageUrl = $(layout.cover, element).attr("src") ?? "";
+    const imageUrl = secureUrl($(layout.cover, element).attr("src") ?? "");
 
     if (!mangaId || !title || !imageUrl || seenIds.includes(mangaId)) return;
 
@@ -128,7 +128,9 @@ export function parseMangaDetails($: CheerioAPI, mangaId: string): SourceManga {
       primaryTitle: $("span.detail-info-right-title-font", section).text().trim(),
       secondaryTitles: [],
       // The cover container is a sibling of `.detail-info`, so it is not scoped to it.
-      thumbnailUrl: $(".detail-info-cover-img", $(".detail-info-cover")).attr("src") ?? "",
+      thumbnailUrl: secureUrl(
+        $(".detail-info-cover-img", $(".detail-info-cover")).attr("src") ?? "",
+      ),
       synopsis: $("p.fullcontent").text().trim(),
       rating: Number($("span.item-score", section).text().trim().replace(",", ".")),
       status:
@@ -163,6 +165,14 @@ export function parseChapters($: CheerioAPI, sourceManga: SourceManga): Chapter[
   }
 
   return chapters.reverse();
+}
+
+/**
+ * The CDN serves covers over https, but the markup links them as http or
+ * protocol-relative, and iOS App Transport Security blocks plain http loads.
+ */
+function secureUrl(src: string): string {
+  return src.replace(/^(?:https?:)?\/\//, "https://");
 }
 
 /** Ids reach Paperback as opaque keys, so restrict them to a filesystem-safe set. */

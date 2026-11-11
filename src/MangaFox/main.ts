@@ -36,6 +36,7 @@ import {
 } from "./parsers";
 import type MangaFoxConfig from "./pbconfig";
 import { extractChapterPages } from "./reader";
+import { chapterUrl, directoryUrl, mangaUrl, releasesUrl } from "./urls";
 
 const SECTION_HOT = "hot-release";
 const SECTION_NEW = "new-manga";
@@ -163,15 +164,7 @@ export class MangaFoxExtension implements ExtensionImpl<typeof MangaFoxConfig> {
   }
 
   async getChapterDetails(chapter: Chapter): Promise<ChapterDetails> {
-    const url = new URL(DOMAIN)
-      .addPathComponent("manga")
-      .addPathComponent(chapter.sourceManga.mangaId)
-      .addPathComponent(chapter.chapterId)
-      // Required, not optional: without it the site relies on a redirect that never
-      // fires for ids containing a dot ("c001.1" reads as a file extension). It also
-      // keeps the chapter segment in the URL, which extractChapterPages needs.
-      .addPathComponent("1.html")
-      .toString();
+    const url = chapterUrl(chapter.sourceManga.mangaId, chapter.chapterId);
 
     const pages = await extractChapterPages(await fetchCheerio(url), url);
     if (pages.length === 0) {
@@ -180,22 +173,6 @@ export class MangaFoxExtension implements ExtensionImpl<typeof MangaFoxConfig> {
 
     return { id: chapter.chapterId, mangaId: chapter.sourceManga.mangaId, pages };
   }
-}
-
-function mangaUrl(mangaId: string): string {
-  return new URL(DOMAIN).addPathComponent("manga").addPathComponent(mangaId).toString();
-}
-
-function directoryUrl(page: number): string {
-  const url = new URL(DOMAIN).addPathComponent("directory");
-  url.addPathComponent(page > 1 ? `${page}.html?news` : "?news");
-  return url.toString();
-}
-
-function releasesUrl(page: number): string {
-  const url = new URL(DOMAIN).addPathComponent("releases");
-  if (page > 1) url.addPathComponent(`${page}.html`);
-  return url.toString();
 }
 
 function nextMetadata(

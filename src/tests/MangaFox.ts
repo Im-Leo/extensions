@@ -21,6 +21,7 @@ import {
   parseNextPage,
 } from "../MangaFox/parsers.js";
 import sourceInfo from "../MangaFox/pbconfig.js";
+import { chapterUrl, directoryUrl, mangaUrl, releasesUrl } from "../MangaFox/urls.js";
 import { UNRATED_LISTING_DEFAULT } from "../utils/content-rating.js";
 import {
   assertDiscoverSectionItem,
@@ -62,6 +63,30 @@ function registerOfflineTests(suite: TestSuite): void {
       title: "First Title",
       subtitle: "Ch.120",
     });
+  });
+
+  suite.test("urls: every page URL is final, so no redirect downgrades it to http", async () => {
+    expect(mangaUrl("sword_king")).to.equal("https://fanfox.net/manga/sword_king/");
+    expect(releasesUrl(1)).to.equal("https://fanfox.net/releases/");
+    expect(releasesUrl(3)).to.equal("https://fanfox.net/releases/3.html");
+    expect(directoryUrl(1)).to.equal("https://fanfox.net/directory/?news");
+    expect(directoryUrl(2)).to.equal("https://fanfox.net/directory/2.html?news");
+    expect(chapterUrl("sword_king", "c001.1")).to.equal(
+      "https://fanfox.net/manga/sword_king/c001.1/1.html",
+    );
+  });
+
+  suite.test("covers: http and protocol-relative sources are upgraded to https", async () => {
+    const entries = parseListing(cheerio.load(COMPACT_LISTING_HTML), LAYOUT_COMPACT, []);
+    expect(entries.map((entry) => entry.imageUrl)).to.deep.equal([
+      "https://fmcdn.mfcdn.net/store/manga/1/cover.jpg?token=a",
+      "https://fmcdn.mfcdn.net/store/manga/2/cover.jpg?token=b",
+    ]);
+
+    const detail = parseMangaDetails(cheerio.load(DETAIL_SAFE_HTML), "safe_title");
+    expect(detail.mangaInfo.thumbnailUrl).to.equal(
+      "https://fmcdn.mfcdn.net/store/manga/9/cover.jpg?token=z",
+    );
   });
 
   suite.test("parseListing: detailed layout takes the first part as subtitle", async () => {
