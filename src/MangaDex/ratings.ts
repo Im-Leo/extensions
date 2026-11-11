@@ -16,7 +16,7 @@ export const contentRatingMap: Record<string, ContentRating> = Object.fromEntrie
   RATINGS.map((r) => [r.enum, r.paperback]),
 );
 
-/** An unrecognised rating is treated as ADULT: the safe direction to be wrong in. */
+/** An unrecognized rating is treated as ADULT: the safe direction to be wrong in. */
 export function resolvePaperbackRating(rawContentRating: string): ContentRating {
   return contentRatingMap[rawContentRating] ?? ContentRating.ADULT;
 }

@@ -293,7 +293,7 @@ so a tile can read `MATURE` until its title has been opened once. See
 
 ## Licensing
 
-GPL-3.0-or-later. The full text is in [`LICENSE`](LICENSE), the licence is declared in
+GPL-3.0-or-later. The full text is in [`LICENSE`](LICENSE), the license is declared in
 `package.json`, and all 95 source files carry `SPDX-License-Identifier: GPL-3.0-or-later` with
 `Copyright © 2026 Im-Leo`.
 

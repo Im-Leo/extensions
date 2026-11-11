@@ -67,7 +67,7 @@ export class FlameComicsExtension implements ExtensionImpl<typeof FlameComicsCon
   cookieStorageInterceptor = new CookieStorageInterceptor({ storage: "stateManager" });
   flameInterceptor = new SiteInterceptor("main", { domain: DOMAIN });
 
-  /** The whole catalogue, aggregated once and reused for search, filters and sort. */
+  /** The whole catalog, aggregated once and reused for search, filters and sort. */
   private candidateCache: {
     data: { candidates: SortableListItem[]; params: FlameFilter };
     timestamp: number;

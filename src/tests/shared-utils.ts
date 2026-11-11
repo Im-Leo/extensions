@@ -182,7 +182,7 @@ export function registerSharedUtilTests(suite: TestSuite): void {
   });
 
   suite.test("rateContent: adult wins, mature is a floor, casing is irrelevant", async () => {
-    expect(rateContent(["Action", "Comedy"]), "nothing recognised").to.equal(
+    expect(rateContent(["Action", "Comedy"]), "nothing recognized").to.equal(
       ContentRating.EVERYONE,
     );
     expect(rateContent(["Ecchi"]), "mature genre").to.equal(ContentRating.MATURE);

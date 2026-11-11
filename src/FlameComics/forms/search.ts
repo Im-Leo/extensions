@@ -15,7 +15,7 @@ import type { OptionItem, SearchMetadata, FlameFilter } from "../models";
 
 /**
  * The advanced-search form. Its option lists are supplied by the caller because
- * they are derived from the aggregated catalogue rather than published by the
+ * they are derived from the aggregated catalog rather than published by the
  * site, and every selection is applied locally.
  */
 export class FlameAdvancedSearchForm extends AdvancedSearchForm {

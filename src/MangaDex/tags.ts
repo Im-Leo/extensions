@@ -34,7 +34,7 @@ interface RawTagListResponse {
 
 /**
  * Content ratings are a query parameter, not real tags, but the search UI has
- * only tag sections to render them in — so they are synthesised here.
+ * only tag sections to render them in — so they are synthesized here.
  */
 const SYNTHETIC_RATING_TAGS: Tag[] = RATINGS.map((r, i) => ({
   id: String(i + 1),

@@ -57,7 +57,7 @@ function registerOfflineTests(suite: TestSuite): void {
     assertUniqueInterceptorIds(MangaKakalot, "MangaKakalot");
   });
 
-  suite.test("parseDiscoverSectionItems: maps every entry and honours section type", async () => {
+  suite.test("parseDiscoverSectionItems: maps every entry and honors section type", async () => {
     const $ = cheerio.load(LISTING_HTML);
     const items = parseDiscoverSectionItems($, {
       id: "most_popular",
@@ -99,7 +99,7 @@ function registerOfflineTests(suite: TestSuite): void {
     expect(item && "supertitle" in item ? item.supertitle : undefined).to.equal("Chapter 12");
   });
 
-  suite.test("image sources: data-src wins, relative and http are normalised", async () => {
+  suite.test("image sources: data-src wins, relative and http are normalized", async () => {
     const $ = cheerio.load(LISTING_HTML);
     const items = parseDiscoverSectionItems($, {
       id: "most_popular",

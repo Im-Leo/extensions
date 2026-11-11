@@ -55,7 +55,7 @@ export const PAGER_ABSENT_HTML = `<html><body><div class="pager-list-left"></div
 
 /**
  * Tagged Comedy and Romance only, so a rating taken from the site's genre
- * catalogue rather than these tags fails: that catalogue always contains "Adult".
+ * catalog rather than these tags fails: that catalog always contains "Adult".
  */
 export const DETAIL_SAFE_HTML = `
 <html><body>

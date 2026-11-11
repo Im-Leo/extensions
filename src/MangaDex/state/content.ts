@@ -4,7 +4,7 @@
 import { getDefaultRatings } from "../lookups";
 import { getKey, readStringArray, setKey, THUMBNAIL_QUALITY_SCHEMA } from "./storage";
 
-/** Content ratings, and the reader and synopsis behaviour that follows from them. */
+/** Content ratings, and the reader and synopsis behavior that follows from them. */
 
 export const getRatings = (): string[] => readStringArray("ratings", () => getDefaultRatings());
 export const setRatings = (v: string[]): void => setKey("ratings", v);

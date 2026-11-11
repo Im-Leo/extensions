@@ -66,7 +66,7 @@ function relationship(type: RelationshipType, fileName?: string): Relationship {
 /**
  * Characterization tests over MangaDex's pure helpers.
  *
- * They pin current behaviour rather than desired behaviour: a failure during a
+ * They pin current behavior rather than desired behavior: a failure during a
  * restructuring means the move changed something, not that the test is stale.
  */
 const UUID = "f9c33607-9180-4ba6-b85c-e4b5faee7192";
@@ -77,7 +77,7 @@ const UUID = "f9c33607-9180-4ba6-b85c-e4b5faee7192";
  * The suite otherwise takes the first search result, and many of MangaDex's most
  * popular titles are licensed: every chapter carries `externalUrl` with
  * `pages: 0`, so `getChapters` correctly returns none and the assertion fails on
- * right behaviour. This one has chapters that are actually readable.
+ * right behavior. This one has chapters that are actually readable.
  */
 const LIVE_MANGA_ID = "77bee52c-d2d6-44ad-a33a-1734c1fe696a";
 
@@ -87,7 +87,7 @@ function registerHelperTests(suite: TestSuite): void {
     expect(chunk([], 10), "empty input yields no batches").to.deep.equal([]);
   });
 
-  suite.test("isNotFoundError: recognises all three 404 shapes", async () => {
+  suite.test("isNotFoundError: recognizes all three 404 shapes", async () => {
     expect(isNotFoundError(new Error("boom [404] nope"))).to.equal(true);
     expect(isNotFoundError(new Error("HTTP 404"))).to.equal(true);
     expect(isNotFoundError("404 MangaDex Request Failed")).to.equal(true);
@@ -258,7 +258,7 @@ function registerHelperTests(suite: TestSuite): void {
     expect(url.toString()).to.not.contain("status%5B%5D");
   });
 
-  suite.test("urls: at-home server honours the forced-443 setting", async () => {
+  suite.test("urls: at-home server honors the forced-443 setting", async () => {
     expect(buildAtHomeServerUrl(UUID)).to.contain(UUID);
     expect(buildAtHomeServerUrl(UUID, true), "networks that block other ports").to.contain(
       "forcePort443=true",

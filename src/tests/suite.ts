@@ -138,7 +138,7 @@ export const registerDefaultTests = function (
   extensionInfo: ExtensionInfo,
   testData: ExtensionTestData = {},
 ) {
-  registerDefaultInitialisationTests(suite, extension);
+  registerDefaultInitializationTests(suite, extension);
 
   let sourceCapabilities: SourceIntents = 0;
   if (Array.isArray(extensionInfo.capabilities)) {
@@ -179,11 +179,11 @@ export const registerDefaultTests = function (
   }
 };
 
-export const registerDefaultInitialisationTests = function (
+export const registerDefaultInitializationTests = function (
   suite: TestSuite,
   extension: Extension,
 ) {
-  suite.test("initialisation", async () => {
+  suite.test("initialization", async () => {
     await extension.initialise();
   });
 };

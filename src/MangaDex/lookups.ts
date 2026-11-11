@@ -71,7 +71,7 @@ export const STATUSES: readonly StatusEntry[] = [
   { enum: Status.Completed, name: "Completed", icon: "✅", searchable: true },
   { enum: Status.PublishingFinished, name: "Publishing Finished", icon: "📕", searchable: false },
   { enum: Status.Hiatus, name: "Hiatus", icon: "⏸️", searchable: true },
-  { enum: Status.Cancelled, name: "Cancelled", icon: "❌", searchable: true },
+  { enum: Status.Cancelled, name: "Canceled", icon: "❌", searchable: true },
 ];
 
 export interface ImageQuality {

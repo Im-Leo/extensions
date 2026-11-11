@@ -8,7 +8,7 @@ import { ContentRating } from "@paperback/types";
  * same way.
  *
  * A rating is derived from the genres of the title in hand. Neither a
- * source-level constant nor a site's genre catalogue substitutes: the first
+ * source-level constant nor a site's genre catalog substitutes: the first
  * asserts a rating the app cannot second-guess, the second describes the site
  * rather than the title. Matching is case-insensitive over one vocabulary
  * because sites disagree on casing and spelling.
@@ -18,7 +18,7 @@ import { ContentRating } from "@paperback/types";
  * Explicit sexual content.
  *
  * Both the display name and the URL slug of a genre end up here, so entries are
- * written in the normalised form {@link normalize} produces.
+ * written in the normalized form {@link normalize} produces.
  */
 const ADULT_GENRES = new Set([
   "adult",
@@ -67,7 +67,7 @@ function normalize(genre: string): string {
  */
 export const UNRATED_LISTING_DEFAULT = ContentRating.MATURE;
 
-/** An unrecognised genre yields `EVERYONE`, so a new one cannot start hiding titles. */
+/** An unrecognized genre yields `EVERYONE`, so a new one cannot start hiding titles. */
 export function rateContent(genres: Iterable<string> | undefined): ContentRating {
   if (!genres) return ContentRating.EVERYONE;
 

@@ -97,7 +97,7 @@ export const enrichLatestWithBrowseData = (
   });
 };
 
-/** Normalises one listing shape into the merged form, defaulting absent fields. */
+/** Normalizes one listing shape into the merged form, defaulting absent fields. */
 const toSortableItem = (
   browseItem: SeriesListItem,
   simpleItem: SimpleSeriesListItem | undefined,

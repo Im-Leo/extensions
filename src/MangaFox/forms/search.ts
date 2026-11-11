@@ -15,7 +15,7 @@ import { GENRES, type SearchMetadata } from "../models";
 /**
  * One genre, and nothing else: the site appends a single `?genres=` id, supports
  * no exclusions and has no multi-genre endpoint, so the form offers no control
- * the request could not honour.
+ * the request could not honor.
  */
 export class MangaFoxAdvancedSearchForm extends AdvancedSearchForm {
   private readonly searchMetadata: SearchMetadata;

@@ -9,7 +9,7 @@ import type { JSONObject } from "@paperback/types";
  * The site is a Next.js app scraped through its `_next/data/<buildId>/*.json`
  * routes, so these mirror page props rather than a designed API. Two
  * consequences shape the extension: the listing routes return the entire
- * catalogue in one payload, and there is no server-side search — both are why
+ * catalog in one payload, and there is no server-side search — both are why
  * `parsers.ts` aggregates, filters and paginates locally.
  */
 
